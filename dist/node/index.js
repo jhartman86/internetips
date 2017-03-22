@@ -22,18 +22,18 @@ activeParams;
 
 // configuration
 var configs = {
-  containerClass: 'fc-tooltip-container',
-  tooltipClass: 'fc-tooltip',
-  activeClass: 'fc-tooltip-show',
+  containerClass: 'internetips-container',
+  tooltipClass: 'internetips',
+  activeClass: 'internetips-show',
   placeClass: {
-    top: 'fc-tooltip-place-top',
-    right: 'fc-tooltip-place-right',
-    bottom: 'fc-tooltip-place-bottom',
-    left: 'fc-tooltip-place-left'
+    top: 'internetips-place-top',
+    right: 'internetips-place-right',
+    bottom: 'internetips-place-bottom',
+    left: 'internetips-place-left'
   },
   typeClass: {
-    dark: 'fc-tooltip-type-dark',
-    light: 'fc-tooltip-type-light'
+    dark: 'internetips-type-dark',
+    light: 'internetips-type-light'
   },
   /**
    * The only way to set these defaults is via setConfig, but we disallow
@@ -400,7 +400,7 @@ function setTooltipClasses(directionClass) {
 
 /**
  * Create tooltip nodes on the DOM. This works in a way such that if
- * implementors want to put the .fc-tooltip-container <div> in a custom spot,
+ * implementors want to put the .internetips-container <div> in a custom spot,
  * as long as its created on the page before the first tooltip is initialized,
  * it'll just use the existing node.
  */

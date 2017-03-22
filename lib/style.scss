@@ -11,36 +11,36 @@ $tooltip-type-light-bg:       #fff;
 $tooltip-type-light-color:    #222;
 
 @mixin tooltip-type($color) {
-  &.fc-tooltip-place-top::after {
+  &.internetips-place-top::after {
     border-top: 6px solid $color;
   }
-  &.fc-tooltip-place-bottom::after {
+  &.internetips-place-bottom::after {
     border-bottom: 6px solid $color;
   }
-  &.fc-tooltip-place-left::after {
+  &.internetips-place-left::after {
     border-left: 6px solid $color;
   }
-  &.fc-tooltip-place-right::after {
+  &.internetips-place-right::after {
     border-right: 6px solid $color;
   }
 }
 
 // Ensure the tooltip root is always on the left of the page,
-// otherwise we could end up w/ scenarios where the .fc-tooltip
+// otherwise we could end up w/ scenarios where the .internetips
 // gets scrunched width-wise and doesn't calculate correctly
-.fc-tooltip-container {
+.internetips-container {
   position: absolute;
   left: 0;
 }
 
-.fc-tooltip-container, .fc-tooltip {
+.internetips-container, .internetips {
   pointer-events: none;
 }
 
 // WARNING: DO NOT ADD transition: ... PROPERTIES UNLESS YOU PLAN TO UPDATE
 // THE TESTS TO ACCOUNT FOR THE TIMING DELAYS (which influence the results of
 // .getBoundingClientRect() when called on a node during a transition).
-.fc-tooltip {
+.internetips {
   // todo: make 'type-dark' bg/color the defaults?
   position: fixed;
   display: inline-block;
@@ -61,19 +61,19 @@ $tooltip-type-light-color:    #222;
     position: absolute;
   }
 
-  &.fc-tooltip-type-dark {
+  &.internetips-type-dark {
     background: $tooltip-type-dark-bg;
     color: $tooltip-type-dark-color;
     @include tooltip-type($tooltip-type-dark-bg);
   }
 
-  &.fc-tooltip-type-light {
+  &.internetips-type-light {
     background: $tooltip-type-light-bg;
     color: $tooltip-type-light-color;
     @include tooltip-type($tooltip-type-light-bg);
   }
 
-  &.fc-tooltip-show {
+  &.internetips-show {
     visibility: visible;
     opacity: $tooltip-opacity;
   }
@@ -84,7 +84,7 @@ $tooltip-type-light-color:    #222;
   }
 
   // placement classes
-  &.fc-tooltip-place-top {
+  &.internetips-place-top {
     &:before {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
@@ -100,7 +100,7 @@ $tooltip-type-light-color:    #222;
       margin-left: -8px;
     }
   }
-  &.fc-tooltip-place-bottom {
+  &.internetips-place-bottom {
     &:before {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
@@ -116,7 +116,7 @@ $tooltip-type-light-color:    #222;
       margin-left: -8px;
     }
   }
-  &.fc-tooltip-place-left {
+  &.internetips-place-left {
     &:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
@@ -132,7 +132,7 @@ $tooltip-type-light-color:    #222;
       margin-top: -4px;
     }
   }
-  &.fc-tooltip-place-right {
+  &.internetips-place-right {
     &:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
