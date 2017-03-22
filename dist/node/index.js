@@ -162,7 +162,7 @@ function setConfig() {
   if (tipNode) {
     return console.warn('Disallowed: set tooltip configs after first .show().');
   }
-  Object.assign(configs, { placeClass: Object.assign({}, configs.placeClass, options.placeClass) }, { typeClass: Object.assign({}, configs.typeClass, options.typeClass) }, { defaults: Object.assign({}, configs.defaults, options.defaults, {
+  Object.assign(configs, options, { placeClass: Object.assign({}, configs.placeClass, options.placeClass) }, { typeClass: Object.assign({}, configs.typeClass, options.typeClass) }, { defaults: Object.assign({}, configs.defaults, options.defaults, {
       // ensure 'effect' and 'target' defaults are retained
       effect: configs.defaults.effect,
       target: configs.defaults.target
