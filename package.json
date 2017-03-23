@@ -20,7 +20,10 @@
     "test-watch": "karma start ./test/karma.conf.js --log-level debug",
     "prepublish": "npm run build",
     "prebuild": "npm run test",
-    "pretest": "npm run lint"
+    "pretest": "npm run lint",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
   "author": "Jon Hartman",
   "license": "MIT",
