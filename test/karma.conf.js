@@ -8,6 +8,13 @@
 // https://medium.com/@scbarrus/how-to-get-test-coverage-on-react-with-karma-babel-and-webpack-c9273d805063#.l96qr7dym
 
 module.exports = function (config) {
+
+  var _browsers = ['Chrome', 'Firefox'];
+
+  if (process.env.TRAVIS) {
+    _browsers = ['Chrome_travis_ci'];
+  }
+
   config.set({
 
     browserNoActivityTimeout: 10000,
@@ -83,7 +90,15 @@ module.exports = function (config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     // browsers: ['Chrome', 'Firefox', 'PhantomJS', 'IE'],
-    browsers: ['Chrome', 'Firefox'],
+    // browsers: ['Chrome', 'Firefox'],
+    browsers: _browsers,
+
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
