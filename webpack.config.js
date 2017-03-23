@@ -25,17 +25,30 @@ const defaults = {
 };
 
 module.exports = [
-  // unminified
-  // _.merge({
-  //   // target: 'web',
+  // node require-able
+  // _.merge({}, defaults, {
+  //   target: 'node',
   //   output: {
-  //     filename: 'bundled.js'
+  //     library: 'internetips',
+  //     libraryTarget: 'commonjs2',
+  //     path: path.resolve(__dirname, 'dist/node'),
+  //     filename: 'index.js'
   //   }
-  // }, defaults),
+  // }),
 
-  // minified
+  // web (attached to window as 'internetips')
   _.merge({
-    // target: 'web',
+    target: 'web',
+    output: {
+      library: 'internetips',
+      libraryTarget: 'window',
+      filename: 'bundled.js'
+    }
+  }, defaults),
+
+  // web minified
+  _.merge({
+    target: 'web',
     output: {
       library: 'internetips',
       libraryTarget: 'window',
@@ -44,18 +57,5 @@ module.exports = [
     plugins: [
       new webpack.optimize.UglifyJsPlugin()
     ]
-  }, defaults),
-
-  // minified with inline source map
-  // _.merge({
-  //   output: {
-  //     library: 'internetips',
-  //     libraryTarget: 'window',
-  //     filename: 'bundled.min.mapped.js'
-  //   },
-  //   devtool: 'eval-source-map',
-  //   plugins: [
-  //     new webpack.optimize.UglifyJsPlugin()
-  //   ]
-  // }, defaults)
+  }, defaults)
 ];

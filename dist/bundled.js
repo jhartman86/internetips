@@ -1,123 +1,222 @@
-export {
-  show,
-  hide,
-  setConfig,
-  destroy,
-  _restoreConfigDefaults,
-  _inspectConfig
-};
+window["internetips"] =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
 
-var
-  containerNode,
-  tipNode,
-  isOpen,
-  isFloating,
-  pointX,
-  pointY,
-  frameNeedsUpdate,
-  lastPlacementDirection,
-  animationFrame,
-  windowWidth,
-  windowHeight,
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.show = show;
+exports.hide = hide;
+exports.setConfig = setConfig;
+exports.destroy = destroy;
+exports._restoreConfigDefaults = _restoreConfigDefaults;
+exports._inspectConfig = _inspectConfig;
+
+
+var containerNode, tipNode, isOpen, isFloating, pointX, pointY, frameNeedsUpdate, lastPlacementDirection, animationFrame, windowWidth, windowHeight,
+/**
+ * Whenever a tooltip is .show()n, activeParams are the settings for the
+ * currently-being-rendered tooltip.
+ */
+activeParams;
+
+// configuration
+var configs = {
+  containerClass: 'internetips-container',
+  tooltipClass: 'internetips',
+  activeClass: 'internetips-show',
+  placeClass: {
+    top: 'internetips-place-top',
+    right: 'internetips-place-right',
+    bottom: 'internetips-place-bottom',
+    left: 'internetips-place-left'
+  },
+  typeClass: {
+    dark: 'internetips-type-dark',
+    light: 'internetips-type-light'
+  },
   /**
-   * Whenever a tooltip is .show()n, activeParams are the settings for the
-   * currently-being-rendered tooltip.
+   * The only way to set these defaults is via setConfig, but we disallow
+   * setting the 'effect' default, because the only other option is "solid",
+   * which would require a 'target' default (and target default defeats the
+   * entire point of tooltips).
    */
-  activeParams;
+  defaults: {
+    /** "float" | "solid" - cannot be configured with a default */
+    effect: 'float',
+    /** domElement - cannot be configured with a default */
+    target: null,
+    /** null (dynamic) | 'top' | 'right' | 'bottom' | 'left' */
+    place: null,
+    /** 'dark' | 'light' - these are legacy options we have to support */
+    type: 'dark',
+    /** array of any default class names to add to always the tooltip node */
+    classes: [],
+    /** offset tooltip X axis */
+    offsetX: 15,
+    /** offset tooltip Y axis */
+    offsetY: 15
+  }
+},
 
-  // configuration
-const
-  configs = {
-    containerClass: 'internetips-container',
-    tooltipClass: 'internetips',
-    activeClass: 'internetips-show',
-    placeClass: {
-      top: 'internetips-place-top',
-      right: 'internetips-place-right',
-      bottom: 'internetips-place-bottom',
-      left: 'internetips-place-left'
-    },
-    typeClass: {
-      dark: 'internetips-type-dark',
-      light: 'internetips-type-light'
-    },
-    /**
-     * The only way to set these defaults is via setConfig, but we disallow
-     * setting the 'effect' default, because the only other option is "solid",
-     * which would require a 'target' default (and target default defeats the
-     * entire point of tooltips).
-     */
-    defaults: {
-      /** "float" | "solid" - cannot be configured with a default */
-      effect: 'float',
-      /** domElement - cannot be configured with a default */
-      target: null,
-      /** null (dynamic) | 'top' | 'right' | 'bottom' | 'left' */
-      place: null,
-      /** 'dark' | 'light' - these are legacy options we have to support */
-      type: 'dark',
-      /** array of any default class names to add to always the tooltip node */
-      classes: [],
-      /** offset tooltip X axis */
-      offsetX: 15,
-      /** offset tooltip Y axis */
-      offsetY: 15
+
+/**
+ * Calculation helpers; accessible as properties.
+ * @todo: memoize calls triggering layout recalculation to prevent thrashing.
+ */
+calcs = Object.create({}, {
+  nodeWidth: {
+    get: function get() {
+      return tipNode.clientWidth;
     }
   },
-
-  /**
-   * Calculation helpers; accessible as properties.
-   * @todo: memoize calls triggering layout recalculation to prevent thrashing.
-   */
-  calcs = Object.create({}, {
-    nodeWidth: {get() { return tipNode.clientWidth; }},
-    nodeHeight: {get() { return tipNode.clientHeight; }},
-    leftWhenVertical: {get() {
-      return pointX - (this.nodeWidth / 2);
-    }},
-    topWhenHorizontal: {get() {
-      return pointY - (this.nodeHeight / 2);
-    }},
-    rightWhenDirLeft: {get() {
+  nodeHeight: {
+    get: function get() {
+      return tipNode.clientHeight;
+    }
+  },
+  leftWhenVertical: {
+    get: function get() {
+      return pointX - this.nodeWidth / 2;
+    }
+  },
+  topWhenHorizontal: {
+    get: function get() {
+      return pointY - this.nodeHeight / 2;
+    }
+  },
+  rightWhenDirLeft: {
+    get: function get() {
       return windowWidth - pointX + activeParams.offsetX;
-    }},
-    leftWhenDirRight: {get() {
+    }
+  },
+  leftWhenDirRight: {
+    get: function get() {
       return pointX + activeParams.offsetX;
-    }},
-    bottomWhenDirTop: {get() {
+    }
+  },
+  bottomWhenDirTop: {
+    get: function get() {
       return windowHeight - (pointY - activeParams.offsetY);
-    }},
-    topWhenDirBottom: {get() {
+    }
+  },
+  topWhenDirBottom: {
+    get: function get() {
       return pointY + activeParams.offsetY;
-    }},
-    withinLeftWhenVert: {get() {
+    }
+  },
+  withinLeftWhenVert: {
+    get: function get() {
       return this.leftWhenVertical > 0;
-    }},
-    withinRightWhenVert: {get() {
-      return pointX + (this.nodeWidth / 2) < windowWidth;
-    }},
-    withinLeftAndRightWhenVert: {get() {
+    }
+  },
+  withinRightWhenVert: {
+    get: function get() {
+      return pointX + this.nodeWidth / 2 < windowWidth;
+    }
+  },
+  withinLeftAndRightWhenVert: {
+    get: function get() {
       return this.withinRightWhenVert && this.withinLeftWhenVert;
-    }},
-    // "is there space when placed fully on top"
-    canPlaceTop: {get() {
+    }
+  },
+  // "is there space when placed fully on top"
+  canPlaceTop: {
+    get: function get() {
       return pointY - (this.nodeHeight + activeParams.offsetY) > 0;
-    }},
-    // "is there space when placed fully on bottom"
-    canPlaceBottom: {get() {
+    }
+  },
+  // "is there space when placed fully on bottom"
+  canPlaceBottom: {
+    get: function get() {
       return pointY + this.nodeHeight + activeParams.offsetY < windowHeight;
-    }},
-    // "is there space left && when vertically centered its in viewport"
-    canPlaceLeft: {get() {
-      return (pointX - (this.nodeWidth + activeParams.offsetX) > 0) &&
-        (this.topWhenHorizontal > 0);
-    }},
-    // "is there space right && when vertically centered its in viewport"
-    canPlaceRight: {get() {
-      return (pointX + this.nodeWidth + activeParams.offsetX) < windowWidth &&
-        (this.topWhenHorizontal > 0);
-    }}
-  });
+    }
+  },
+  // "is there space left && when vertically centered its in viewport"
+  canPlaceLeft: {
+    get: function get() {
+      return pointX - (this.nodeWidth + activeParams.offsetX) > 0 && this.topWhenHorizontal > 0;
+    }
+  },
+  // "is there space right && when vertically centered its in viewport"
+  canPlaceRight: {
+    get: function get() {
+      return pointX + this.nodeWidth + activeParams.offsetX < windowWidth && this.topWhenHorizontal > 0;
+    }
+  }
+});
 
 /**
  * Try as much as possible to use a requestAnimationFrame implementation,
@@ -126,27 +225,11 @@ const
  * that don't have this. HOWEVER - the tooltip will still show up positioned
  * with 'solid' mode, it just won't follow the mouse.
  */
-const _requestAnimationFrame =
-  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.msRequestAnimationFrame ||
-  function () {
-    console.warn(
-      'tooltips require requestAnimationFrame; `float` will not work.'
-    );
-  };
+var _requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function () {
+  console.warn('tooltips require requestAnimationFrame; `float` will not work.');
+};
 
-const _cancelAnimationFrame =
-  window.cancelAnimationFrame ||
-  window.webkitCancelRequestAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.mozCancelRequestAnimationFrame ||
-  window.mozCancelAnimationFrame ||
-  window.msCancelRequestAnimationFrame ||
-  window.msCancelAnimationFrame ||
-  function () {};
-
+var _cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelRequestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelRequestAnimationFrame || window.mozCancelAnimationFrame || window.msCancelRequestAnimationFrame || window.msCancelAnimationFrame || function () {};
 
 /**
  * Set configuration defaults. If the tooltip node already exists (eg. has been
@@ -158,21 +241,17 @@ const _cancelAnimationFrame =
  * changes if the default configs change, but explicity handling depth merges
  * vs. doing deep merges keeps things predictable.
  */
-function setConfig(options = {}) {
+function setConfig() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
   if (tipNode) {
-    return console.warn(
-      'Disallowed: set tooltip configs after first .show().'
-    );
+    return console.warn('Disallowed: set tooltip configs after first .show().');
   }
-  Object.assign(configs, options,
-    {placeClass: Object.assign({}, configs.placeClass, options.placeClass)},
-    {typeClass: Object.assign({}, configs.typeClass, options.typeClass)},
-    {defaults: Object.assign({}, configs.defaults, options.defaults, {
+  Object.assign(configs, options, { placeClass: Object.assign({}, configs.placeClass, options.placeClass) }, { typeClass: Object.assign({}, configs.typeClass, options.typeClass) }, { defaults: Object.assign({}, configs.defaults, options.defaults, {
       // ensure 'effect' and 'target' defaults are retained
       effect: configs.defaults.effect,
       target: configs.defaults.target
-    })}
-  );
+    }) });
 }
 
 /**
@@ -244,15 +323,13 @@ function destroy() {
 function renderSolid() {
   if (!activeParams.target) {
     hide();
-    return console.warn(
-      'Cannot .show() tooltip when effect === `solid` without target node.'
-    );
+    return console.warn('Cannot .show() tooltip when effect === `solid` without target node.');
   }
   var targetBB = activeParams.target.getBoundingClientRect();
-  activeParams.offsetX += (parseInt(targetBB.width / 2) || 0);
-  activeParams.offsetY += (parseInt(targetBB.height / 2) || 0);
-  pointX = targetBB.left + (targetBB.width / 2);
-  pointY = targetBB.top + (targetBB.height / 2);
+  activeParams.offsetX += parseInt(targetBB.width / 2) || 0;
+  activeParams.offsetY += parseInt(targetBB.height / 2) || 0;
+  pointX = targetBB.left + targetBB.width / 2;
+  pointY = targetBB.top + targetBB.height / 2;
   updateTooltip();
 }
 
@@ -267,8 +344,8 @@ function renderSolid() {
 function renderFloating() {
   if (activeParams.target) {
     var targetBB = activeParams.target.getBoundingClientRect();
-    pointX = targetBB.left + (targetBB.width / 2);
-    pointY = targetBB.top + (targetBB.height / 2);
+    pointX = targetBB.left + targetBB.width / 2;
+    pointY = targetBB.top + targetBB.height / 2;
   }
   isFloating = true;
   document.addEventListener('mousemove', trackMousePosition);
@@ -387,7 +464,7 @@ function setStyle(styles) {
   var styleString = '';
   for (var prop in styles) {
     if (styles.hasOwnProperty(prop)) {
-      styleString += `${prop}:${parseInt(styles[prop])}px;`;
+      styleString += prop + ':' + parseInt(styles[prop]) + 'px;';
     }
   }
   tipNode.style.cssText = styleString;
@@ -403,12 +480,7 @@ function setTooltipClasses(directionClass) {
     return;
   }
   lastPlacementDirection = directionClass;
-  tipNode.className = [
-    configs.tooltipClass,
-    configs.activeClass,
-    configs.typeClass[activeParams.type],
-    directionClass
-  ].concat(activeParams.classes).join(' ');
+  tipNode.className = [configs.tooltipClass, configs.activeClass, configs.typeClass[activeParams.type], directionClass].concat(activeParams.classes).join(' ');
 }
 
 /**
@@ -418,16 +490,18 @@ function setTooltipClasses(directionClass) {
  * it'll just use the existing node.
  */
 function ensureInitializedAndReady() {
-  if (tipNode) { return hide(); }
+  if (tipNode) {
+    return hide();
+  }
 
-  containerNode = document.querySelector(`.${configs.containerClass}`);
+  containerNode = document.querySelector('.' + configs.containerClass);
   if (!containerNode) {
     containerNode = document.createElement('div');
     containerNode.className = configs.containerClass;
     document.body.appendChild(containerNode);
   }
 
-  tipNode = containerNode.querySelector(`.${configs.tooltipClass}`);
+  tipNode = containerNode.querySelector('.' + configs.tooltipClass);
   if (!tipNode) {
     tipNode = document.createElement('div');
     tipNode.className = configs.tooltipClass;
@@ -474,7 +548,9 @@ function unbindWindowEvents() {
  * currently open.
  */
 function trackWindowScroll() {
-  if (isOpen === true) { hide(); }
+  if (isOpen === true) {
+    hide();
+  }
 }
 
 /**
@@ -498,7 +574,7 @@ function trackMousePosition(ev) {
  * Testing purposes only; give a way to introspect. These methods *are* made
  * public, but if implementors decide to use them its on them.
  */
-const stashedConfigs = JSON.parse(JSON.stringify(configs));
+var stashedConfigs = JSON.parse(JSON.stringify(configs));
 
 function _restoreConfigDefaults() {
   Object.assign(configs, stashedConfigs);
@@ -507,3 +583,6 @@ function _restoreConfigDefaults() {
 function _inspectConfig() {
   return configs;
 }
+
+/***/ })
+/******/ ]);

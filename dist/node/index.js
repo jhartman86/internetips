@@ -3,14 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.destroy = exports.setConfig = exports.hide = exports.show = undefined;
-
-var _shims = require('./shims');
-
 exports.show = show;
 exports.hide = hide;
 exports.setConfig = setConfig;
 exports.destroy = destroy;
+exports._restoreConfigDefaults = _restoreConfigDefaults;
+exports._inspectConfig = _inspectConfig;
 
 
 var containerNode, tipNode, isOpen, isFloating, pointX, pointY, frameNeedsUpdate, lastPlacementDirection, animationFrame, windowWidth, windowHeight,
@@ -147,6 +145,19 @@ calcs = Object.create({}, {
 });
 
 /**
+ * Try as much as possible to use a requestAnimationFrame implementation,
+ * but if unavailable, we don't provide a polyfill and instead just log
+ * to the console. In other words, conciously do not support browsers
+ * that don't have this. HOWEVER - the tooltip will still show up positioned
+ * with 'solid' mode, it just won't follow the mouse.
+ */
+var _requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function () {
+  console.warn('tooltips require requestAnimationFrame; `float` will not work.');
+};
+
+var _cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelRequestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelRequestAnimationFrame || window.mozCancelAnimationFrame || window.msCancelRequestAnimationFrame || window.msCancelAnimationFrame || function () {};
+
+/**
  * Set configuration defaults. If the tooltip node already exists (eg. has been
  * .show()n once), disallow changing configs. Also, since the properties
  * defaults.target and defaults.effect are per-instance specific, we do some
@@ -205,7 +216,7 @@ function hide() {
   activeParams = pointX = pointY = lastPlacementDirection = null;
   isOpen = isFloating = false;
   frameNeedsUpdate = true;
-  (0, _shims._cancelAnimationFrame)(animationFrame);
+  _cancelAnimationFrame(animationFrame);
   document.removeEventListener('mousemove', trackMousePosition);
   if (tipNode) {
     tipNode.style.cssText = null;
@@ -311,7 +322,7 @@ function updateTooltip() {
   }
 
   if (isFloating) {
-    animationFrame = (0, _shims._requestAnimationFrame)(updateTooltip);
+    animationFrame = _requestAnimationFrame(updateTooltip);
   }
 }
 
@@ -483,4 +494,18 @@ function trackMousePosition(ev) {
   frameNeedsUpdate = true;
   pointX = ev.clientX;
   pointY = ev.clientY;
+}
+
+/**
+ * Testing purposes only; give a way to introspect. These methods *are* made
+ * public, but if implementors decide to use them its on them.
+ */
+var stashedConfigs = JSON.parse(JSON.stringify(configs));
+
+function _restoreConfigDefaults() {
+  Object.assign(configs, stashedConfigs);
+}
+
+function _inspectConfig() {
+  return configs;
 }
