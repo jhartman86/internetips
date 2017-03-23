@@ -12,7 +12,7 @@ module.exports = function (config) {
   var _browsers = ['Chrome', 'Firefox'];
 
   if (process.env.TRAVIS) {
-    _browsers = ['Chrome_travis_ci'];
+    _browsers = ['Chrome_travis_ci', 'Firefox'];
   }
 
   config.set({
