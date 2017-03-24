@@ -292,7 +292,7 @@ function show(options) {
 /**
  * Hide tooltip. Cleans up settings on the currently shown tooltip, and hides.
  */
-function hide() {
+function reset() {
   activeParams = pointX = pointY = lastPlacementDirection = null;
   isOpen = isFloating = false;
   frameNeedsUpdate = true;
@@ -303,6 +303,15 @@ function hide() {
     tipNode.className = configs.tooltipClass;
     tipNode.innerHTML = null;
   }
+}
+
+/**
+ * This is the *publicly* exposed hide function (instead of proxying the reset
+ * function directly as 'hide', because we want to enable the onHideHook and
+ * invoke it only when the public fn is invoked).
+ */
+function hide() {
+  reset();
 
   // Test hook integration
   if (typeof onHideHook === 'function') {
@@ -315,7 +324,7 @@ function hide() {
  */
 function destroy() {
   unbindWindowEvents();
-  hide();
+  reset();
   tipNode && tipNode.parentNode.removeChild(tipNode);
   containerNode && containerNode.parentNode.removeChild(containerNode);
   containerNode = tipNode = null;
@@ -338,7 +347,7 @@ function destroy() {
  */
 function renderSolid() {
   if (!activeParams.target) {
-    hide();
+    reset();
     return console.warn('Cannot .show() tooltip when effect === `solid` without target node.');
   }
   var targetBB = activeParams.target.getBoundingClientRect();
@@ -512,7 +521,7 @@ function setTooltipClasses(directionClass) {
  */
 function ensureInitializedAndReady() {
   if (tipNode) {
-    return hide();
+    return reset();
   }
 
   containerNode = document.querySelector('.' + configs.containerClass);
@@ -533,7 +542,7 @@ function ensureInitializedAndReady() {
   windowWidth = document.body.getBoundingClientRect().width;
   windowHeight = window.innerHeight;
   bindWindowEvents();
-  hide();
+  reset();
 }
 
 /**
@@ -541,7 +550,7 @@ function ensureInitializedAndReady() {
  * .show() is called (eg. *not* removed when hide is called), but
  * *are* unbound when .destroy() is called. Its less expensive to leave
  * the event listeners initialized, since they do little work, then
- * binding and unbinding between every show()/hide() call.
+ * binding and unbinding between every show()/reset() call.
  * Note: this should only be called once, during the first initialization,
  * but just to ensure we don't accidentally bind multiple listeners of the
  * same type, we unbindWindowEvents() as a precaution before ever binding
@@ -570,7 +579,7 @@ function unbindWindowEvents() {
  */
 function trackWindowScroll() {
   if (isOpen === true) {
-    hide();
+    reset();
   }
 }
 
