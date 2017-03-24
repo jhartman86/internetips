@@ -1,6 +1,6 @@
 {
   "name": "internetips",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A tooltip library without the whole kitchen sink",
   "main": "dist/node/index.js",
   "directories": {
