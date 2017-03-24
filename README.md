@@ -1,20 +1,16 @@
 # internetips
 
+[![Build Status](https://api.travis-ci.org/jhartman86/internetips.svg)](http://travis-ci.org/jhartman86/internetips)  [![Dependency Status](https://david-dm.org/jhartman86/internetips.svg)](https://david-dm.org/jhartman86/internetips) [![](http://img.shields.io/npm/v/internetips.svg) ![](http://img.shields.io/npm/dm/internetips.svg)](https://www.npmjs.org/package/internetips)
+
 A not-everything-under-the-sun tooltip library: lightweight, minimal style defaults, and fast. Includes viewport auto-repositioning and cursor-following options. Doesn't support browsers you shouldn't be supporting anyways (IE8).
 
-[![Build Status](https://api.travis-ci.org/jhartman86/internetips.svg)](http://travis-ci.org/jhartman86/internetips)  [![Dependency Status](https://david-dm.org/jhartman86/internetips.svg)](https://david-dm.org/jhartman86/internetips) [![](http://img.shields.io/npm/v/internetips.svg) ![](http://img.shields.io/npm/dm/internetips.svg)](https://www.npmjs.org/package/internetips)
+[Docs &amp; Demo](https://jhartman86.github.io/internetips/)
 
 ## Installation
 
 ### As an npm module
 
     $ npm install internetips
-
-### From the browser
-
-window.internetips will be exposed when including dist/internetips.min.js
-
-    <script src="https://raw.github.com/jhartman86/internetips/master/dist/internetips.min.js" type="text/javascript"></script>
 
 
 ## Usage
