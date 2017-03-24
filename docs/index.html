@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>internetips</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../dist/style.css" />
+  <style type="text/css">
+    html, body {font-family:'Roboto Slab', serif;width:100%;height:100%;padding:0;margin:0;font-size:15px;}
+    body {background:#f1f1f1;color:#777;text-shadow:0 1px 0 #fff;}
+    header {padding:2rem 0;margin-bottom:2rem;text-align:center;background:#e1e1e1;}
+    kbd {text-shadow:none;}
+    h1 {line-height:1.5;}
+    h1 small {display:block;font-size:70%;font-weight:200;}
+    .indent {padding-left:2rem;}
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>internetips<small>tooltips without the whole kitchen sink</small></h1>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <p>
+          Why another tooltip library? We needed something lightweight with
+          minimal assumptions about integration, as well as dynamic repositioning
+          (viewport edge detection), and pointer following. Most other libraries
+          including these features were <i>quite</i> heavy, so we wrote our own.
+        </p>
+        <p>
+          Why is it called <b>internetips</b>? 'Cause every other tooltip thing has
+          "tool" in it, and that gets old.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h2>API</h2>
+
+        <h3>.show(options)</h3>
+        <div class="row">
+          <div class="col">
+<pre>
+  <code>
+    {
+      effect: '', (string)
+      target: object, (DOM node)
+      place: '', (string)
+      type: '', (string)
+      classes: [], (array [string])
+      offsetX: 15, (int)
+      offsetY: 15 (int)
+    }
+  </code>
+</pre>
+          </div>
+          <div class="col">
+            <p>
+              <kbd>effect</kbd> 'float' | 'solid'
+            </p>
+            <p>
+              <kbd>target</kbd> document.querySelector('#test')
+            </p>
+          </div>
+        </div>
+
+        <div class="indent">
+          <code>target (DOM node)</code>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+  </div>
+
+
+<script type="text/javascript" src="../dist/bundled.min.js"></script>
+</body>
+</html>
