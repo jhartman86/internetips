@@ -13,7 +13,8 @@
     ]
   },
   "scripts": {
-    "build": "babel lib/ -d dist/node/ && webpack && node-sass --output ./dist/ ./lib/style.scss",
+    "build": "babel lib/ -d dist/node/ && webpack && node-sass --output ./dist/ ./lib/style.scss && npm run-script copy-build-assets",
+    "copy-build-assets": "cp ./dist/bundled.min.js ./docs/ && cp ./dist/style.css ./docs/",
     "lint": "eslint lib/ test/",
     "start": "webpack-dev-server --open",
     "test": "karma start ./test/karma.conf.js --single-run",
