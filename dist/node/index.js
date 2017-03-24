@@ -9,6 +9,7 @@ exports.setConfig = setConfig;
 exports.destroy = destroy;
 exports._restoreConfigDefaults = _restoreConfigDefaults;
 exports._inspectConfig = _inspectConfig;
+exports._defineTestHooks = _defineTestHooks;
 
 
 var containerNode, tipNode, isOpen, isFloating, pointX, pointY, frameNeedsUpdate, lastPlacementDirection, animationFrame, windowWidth, windowHeight,
@@ -157,6 +158,11 @@ var _requestAnimationFrame = window.requestAnimationFrame || window.webkitReques
 
 var _cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelRequestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelRequestAnimationFrame || window.mozCancelAnimationFrame || window.msCancelRequestAnimationFrame || window.msCancelAnimationFrame || function () {};
 
+// Null by default, these hooks can be set via injected callables that will
+// be invoked during relevant API calls. These should be used explicity for
+// testing purposes.
+var onShowHook, onHideHook, onDestroyHook;
+
 /**
  * Set configuration defaults. If the tooltip node already exists (eg. has been
  * .show()n once), disallow changing configs. Also, since the properties
@@ -223,6 +229,11 @@ function hide() {
     tipNode.className = configs.tooltipClass;
     tipNode.innerHTML = null;
   }
+
+  // Test hook integration
+  if (typeof onHideHook === 'function') {
+    onHideHook();
+  }
 }
 
 /**
@@ -234,6 +245,11 @@ function destroy() {
   tipNode && tipNode.parentNode.removeChild(tipNode);
   containerNode && containerNode.parentNode.removeChild(containerNode);
   containerNode = tipNode = null;
+
+  // Test hook integration
+  if (typeof onDestroyHook === 'function') {
+    onDestroyHook();
+  }
 }
 
 /**
@@ -319,6 +335,11 @@ function updateTooltip() {
     setStyle(styles);
     frameNeedsUpdate = false;
     isOpen = true;
+
+    // Test hook integration
+    if (typeof onShowHook === 'function') {
+      onShowHook(containerNode.innerHTML);
+    }
   }
 
   if (isFloating) {
@@ -508,4 +529,12 @@ function _restoreConfigDefaults() {
 
 function _inspectConfig() {
   return configs;
+}
+
+function _defineTestHooks() {
+  var definitions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  onShowHook = definitions.onShow || null;
+  onHideHook = definitions.onHide || null;
+  onDestroyHook = definitions.onDestroy || null;
 }

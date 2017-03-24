@@ -30,33 +30,33 @@
 <script type="text/javascript" src="/dist/bundled.js"></script>
 <script type="text/javascript">
 
-  var opts = {
-    containerClass: "CCC",
-    tooltipClass: "TT-KLASS",
-    activeClass: "ACTIVE-KLASS",
-    placeClass: {
-      top: 'tip-top',
-      left: 'tip-left',
-      right: 'tip-right',
-      bottom: 'tip-bottom'
-    },
-    typeClass: {
-      dark: 'tt-dark',
-      light: 'tt-light'
-    },
-    defaults: {
-      type: 'light',
-      place: 'bottom',
-      offsetX: 32,
-      offsetY: 32,
-      classes: ['YOLOLOLO', 'biggiesmallz'],
-      target: 'SHOULD NOT BE SET',
-      effect: 'SHOULD NOT BE SET',
-    }
-  };
-
-  internetips.setConfig(opts);
-  console.log('mutated options?', opts);
+  // var opts = {
+  //   containerClass: "CCC",
+  //   tooltipClass: "TT-KLASS",
+  //   activeClass: "ACTIVE-KLASS",
+  //   placeClass: {
+  //     top: 'tip-top',
+  //     left: 'tip-left',
+  //     right: 'tip-right',
+  //     bottom: 'tip-bottom'
+  //   },
+  //   typeClass: {
+  //     dark: 'tt-dark',
+  //     light: 'tt-light'
+  //   },
+  //   defaults: {
+  //     type: 'light',
+  //     place: 'bottom',
+  //     offsetX: 32,
+  //     offsetY: 32,
+  //     classes: ['YOLOLOLO', 'biggiesmallz'],
+  //     target: 'SHOULD NOT BE SET',
+  //     effect: 'SHOULD NOT BE SET',
+  //   }
+  // };
+  //
+  // internetips.setConfig(opts);
+  // console.log('mutated options?', opts);
 
   const node = document.querySelector('#test');
   node.addEventListener('mouseenter', function(ev) {
@@ -98,6 +98,24 @@
     });
   });
   nodeRight.addEventListener('mouseleave', internetips.hide);
+
+  // Test hook integration
+  internetips._defineTestHooks({
+    onShow: function() {
+      console.log(arguments);
+    },
+    onHide: function () {
+      console.log('hidden ok');
+    }
+  });
+
+  window['change'] = function () {
+    internetips._defineTestHooks({
+      onShow: function(html) {
+        console.log('hey there', html);
+      }
+    });
+  };
 </script>
 </body>
 </html>
