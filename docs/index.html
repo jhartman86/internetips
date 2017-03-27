@@ -13,12 +13,13 @@
     h1 {line-height:1.5;}
     h1 small {display:block;font-size:70%;font-weight:200;}
     .indent {padding-left:2rem;}
-    kbd, .internetips-container {text-shadow:none;}
+    #editor, kbd, .internetips-container {text-shadow:none;}
     #mbpro-demo {padding:2rem;text-align:center;}
     #mbpro-demo svg {display:inline-block;max-width:80%;}
     .mb-camera span {display:block;}
     .mb-camera span.underline {text-decoration:underline;}
     .grouper {padding-bottom:1rem;margin-bottom:2rem;border-bottom:1px dashed #aaa;}
+    #demo-btn-area {text-align:center;padding:2rem;}
   </style>
 </head>
 
@@ -30,10 +31,13 @@
     <div class="row">
       <div class="col">
         <p>
-          Why another tooltip library? We needed something lightweight with
-          minimal assumptions about integration, as well as dynamic repositioning
-          (viewport edge detection), and pointer following. Most other libraries
-          including these features were <i>quite</i> heavy, so we wrote our own.
+          Why another tooltip library? We (the royal "we", as in my employer)
+          needed something lightweight with minimal assumptions about integration,
+          as well as dynamic repositioning (viewport edge detection), and pointer
+          following. Most other libraries including these features are heavier
+          than necessary, so we wrote our own. We also wanted something well
+          tested, so <i>internetips</i> has pretty damn thorough coverage - in
+          the neighborhood of 95%.
         </p>
         <p>
           Why is it called <b>internetips</b>? 'Cause every other tooltip thing has
@@ -151,6 +155,12 @@
         <div class="grouper">
           <h2>Install</h2>
           <p><kbd>npm install internetips</kbd></p>
+          <p>
+            If you're using SASS and the <code>node_modules</code> directory is
+            setup in your includePaths, you can <kbd>@import 'internetips/lib/style'</kbd>.
+            Otherwise, you should include the styles from <code>dist/style.css</code>
+            into your page another way. <a href="https://raw.githubusercontent.com/jhartman86/internetips/master/dist/style.css" target="_blank">See <strong>styles.css</strong></a>.
+          </p>
         </div>
 
         <div class="grouper">
@@ -162,24 +172,32 @@
             a tooltip. This library makes no assumptions, and you're free to
             trigger a tooltip whenever/however you want.
           </p>
-          <p>
-            Example:
+          <p style="font-style:italic;">
+            Use the live-editor below to play around with different
+            configuration options.
           </p>
-<pre>
-  <code>
-// with node:
-var internetips = require('internetips');
-// OR just window.internetips (globally scoped)
 
-var node = document.querySelector('#something');
-node.addEventListener('mouseenter', function (ev) {
-  internetips.show({
-    content: 'Lorem ipsum dolor'
+          <div id="demo-btn-area">
+            <button type="button" id="btn-trigger">Sample Button</button>
+          </div>
+          <div id="editor" style="min-height:300px;">/**
+ * If including via node: var internetips = require('internetips');
+ * If including via browser build, 'internetips' is bound to window object.
+ */
+
+  var node = document.querySelector('#btn-trigger');
+
+  node.addEventListener('mouseenter', function (ev) {
+    internetips.show({
+      content: 'Something lovely in here',
+      //effect: 'solid',
+      //target: ev.target, // if 'effect' = 'solid', target is required
+      //classes: ['a-custom', 'list-of-classes']
+    });
   });
-});
-node.addEventListener('mouseleave', internetips.hide);
-  </code>
-</pre>
+
+  node.addEventListener('mouseleave', internetips.hide);
+          </div>
         </div>
 
         <div class="grouper">
@@ -296,22 +314,6 @@ node.addEventListener('mouseleave', internetips.hide);
         </div>
 
         <div class="grouper">
-          <h4>.hide()</h4>
-          <p>
-            Hide the tooltip. Note, this just sets the tooltip to not be
-            displayed on the page anymore, but does *not* remove the node from
-            the DOM.
-          </p>
-        </div>
-
-        <div class="grouper">
-          <h4>.destroy()</h4>
-          <p>
-            Completely tear down the tooltip instance.
-          </p>
-        </div>
-
-        <div class="grouper">
           <h4>.setConfig({...})</h4>
           <p>
             Some defaults can be defined for properties that all tooltips will
@@ -349,15 +351,106 @@ node.addEventListener('mouseleave', internetips.hide);
             </div>
           </div>
         </div>
+
+        <div class="grouper">
+          <h4>.hide()</h4>
+          <p>
+            Hide the tooltip. Note, this just sets the tooltip to not be
+            displayed on the page anymore, but does *not* remove the node from
+            the DOM.
+          </p>
+        </div>
+
+        <div class="grouper">
+          <h4>.destroy()</h4>
+          <p>
+            Completely tear down the tooltip instance.
+          </p>
+        </div>
+
+        <div class="grouper">
+          <h2>Hidden-But-Not-Really-Things</h2>
+          <p>
+            If you're an OOP snob, you'll recognize that these should probably
+            be private-ish methods. To which you'll kindly be directed to:
+            <a href="https://mail.python.org/pipermail/tutor/2003-October/025932.html" target="_blank">this lovely tidbit from the python community</a>.
+          </p>
+          <p>
+            Anyways - since testing is actually kind of important, instead of
+            integrating this tooltip library and trying to inspect what occurs
+            in the DOM (like inspecting position calculations, and/or what
+            content is going to be displayed in the tooltip), a couple hooks
+            are available for use during testing.
+          </p>
+          <p>
+            Note, these methods are intended for use during testing only. While
+            they <i>are</i> available all the time, just... don't.
+          </p>
+        </div>
+
+        <div class="grouper">
+          <h4>._defineTestHooks({...})</h4>
+          <p>
+            Hooks can be registered which will be invoked during show(), hide(),
+            and destroy() calls. All hooks will be extracted from the passed in
+            object. In order to <i>nullify all registered hooks</i>, simply
+            invoke <code>._defineTestHooks()</code> with no arguments.
+          </p>
+          <div class="row">
+            <div class="col">
+              <div class="indent">
+                <p>
+                  <kbd>onShow | function</kbd> optional
+                </p>
+                <p>
+                  Will receive param <code>html</code>, which is a stringified
+                  version of the HTML defining the tooltip instance. Use this
+                  during testing to check what the tooltip is actually showing.
+                </p>
+                <hr/>
+
+                <p>
+                  <kbd>onHide | function</kbd> optional
+                </p>
+                <p>
+                  Invoked with no arguments when the tooltip <code>.hide()</code>
+                  method is called.
+                </p>
+                <hr/>
+
+                <p>
+                  <kbd>onDestroy | function</kbd> optional
+                </p>
+                <p>
+                  Invoked with no arguments when the tooltip <code>.destroy()</code>
+                  method is called.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grouper">
+          <h4>._inspectConfig()</h4>
+          <p>
+            Get a snapshot of the current default configurations.
+          </p>
+        </div>
+
+        <div class="grouper">
+          <h4>._restoreConfigDefaults()</h4>
+          <p>
+            If default configurations were changed with <code>.setConfig()</code>,
+            they can be reset by invoking <code>_restoreConfigDefaults()</code>.
+          </p>
+        </div>
       </div>
     </div>
-
-
-
   </div>
 
 
 <script type="text/javascript" src="bundled.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
 <script type="text/javascript">
   var screen = document.querySelector('#portDock');
   screen.addEventListener('mouseenter', function () {
@@ -401,6 +494,28 @@ node.addEventListener('mouseleave', internetips.hide);
     });
   });
   screen.addEventListener('mouseleave', internetips.hide);
+
+  // Initialize ACE editor
+  var editor = ace.edit('editor');
+  editor.setTheme('ace/theme/monokai');
+  editor.getSession().setMode('ace/mode/javascript');
+  editor.on('change', onEditorChange);
+  onEditorChange();
+
+  function onEditorChange() {
+    document.querySelector('#btn-trigger').remove();
+    var newBtn = document.createElement('button');
+    newBtn.id = 'btn-trigger';
+    newBtn.setAttribute('type', 'button');
+    newBtn.innerText = 'Sample Button';
+    document.querySelector('#demo-btn-area').appendChild(newBtn);
+
+    try {
+      eval(editor.getSession().getValue());
+    } catch(e) {
+      console.warn('Syntax evaluation failed...');
+    }
+  }
 </script>
 </body>
 </html>
