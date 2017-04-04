@@ -7,19 +7,29 @@
 // https://x-team.com/blog/setting-up-javascript-testing-tools-for-es6/
 // https://medium.com/@scbarrus/how-to-get-test-coverage-on-react-with-karma-babel-and-webpack-c9273d805063#.l96qr7dym
 
+if (!process.env.BS_USERNAME || !process.env.BS_ACCESS_KEY) {
+  const bsCredentials = require('../.browserstack.json');
+  process.env.BS_USERNAME = bsCredentials.username;
+  process.env.BS_ACCESS_KEY = bsCredentials.accessKey;
+}
+
 module.exports = function (config) {
 
   var _browsers = [
     'Chrome',
-    'Firefox'
+    'Firefox',
+    'BS_IE_10',
+    'BS_IE_11',
+    'BS_Edge'
   ];
 
   if (process.env.TRAVIS) {
     _browsers = [
       'Chrome_travis_ci',
       'Firefox',
-      'SL_InternetExplorer',
-      'SL_Edge'
+      'BS_IE_10',
+      'BS_IE_11',
+      'BS_Edge'
     ];
   }
 
@@ -66,17 +76,13 @@ module.exports = function (config) {
     },
 
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage', 'saucelabs'],
+    reporters: ['mocha', 'coverage', 'BrowserStack'],
 
-    // saucelabs configuration (for IE testing)
-    sauceLabs: {
-      testName: 'internetips',
-      startConnect: false,
-      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
-      connectOptions: {
-        port: 5757,
-        logfile: 'sauce_connect.log'
-      }
+    // BrowserStack configuration (for IE testing)
+    browserStack: {
+      name: 'internetips',
+      username: process.env.BS_USERNAME,
+      accessKey: process.env.BS_ACCESS_KEY
     },
     captureTimeout: 20000,
 
@@ -106,17 +112,26 @@ module.exports = function (config) {
         base: 'Chrome',
         flags: ['--no-sandbox']
       },
-      SL_InternetExplorer: {
-        base: 'SauceLabs',
-        browserName: 'internet explorer',
-        version: '11.0',
-        platform: 'Windows 7'
+      BS_IE_10: {
+        base: 'BrowserStack',
+        browser: 'ie',
+        browser_version: '10',
+        os: 'Windows',
+        os_version: '7'
       },
-      SL_Edge: {
-        base: 'SauceLabs',
-        browserName: 'MicrosoftEdge',
-        version: '14.14393',
-        platform: 'Windows 10'
+      BS_IE_11: {
+        base: 'BrowserStack',
+        browser: 'ie',
+        browser_version: '11',
+        os: 'Windows',
+        os_version: '7'
+      },
+      BS_Edge: {
+        base: 'BrowserStack',
+        browser: 'edge',
+        browser_version: '14',
+        os: 'Windows',
+        os_version: '10'
       }
     },
 
@@ -128,6 +143,7 @@ module.exports = function (config) {
     // how many browser should be started simultaneous
     concurrency: Infinity,
 
+    // webpack configs
     webpack: {
       module: {
         rules: [
@@ -150,20 +166,8 @@ module.exports = function (config) {
         ]
       }
     },
-
     webpackServer: {
       noInfo: true
-    },
-
-    // plugins: [
-    //   require('karma-webpack'),
-    //   require('istanbul-instrumenter-loader'),
-    //   require('karma-mocha'),
-    //   require('karma-mocha-reporter'),
-    //   require('karma-coverage'),
-    //   require('karma-chrome-launcher'),
-    //   require('karma-firefox-launcher'),
-    //   require('karma-sauce-launcher')
-    // ]
+    }
   });
 };
