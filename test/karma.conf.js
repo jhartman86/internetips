@@ -9,10 +9,20 @@
 
 module.exports = function (config) {
 
-  var _browsers = ['Chrome', 'Firefox'];
+  var _browsers = [
+    'Chrome',
+    'Firefox',
+    'SL_InternetExplorer',
+    'SL_Edge'
+  ];
 
   if (process.env.TRAVIS) {
-    _browsers = ['Chrome_travis_ci', 'Firefox'];
+    _browsers = [
+      'Chrome_travis_ci',
+      'Firefox',
+      'SL_InternetExplorer',
+      'SL_Edge'
+    ];
   }
 
   config.set({
@@ -41,18 +51,15 @@ module.exports = function (config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha'],
 
-
     // list of files / patterns to load in the browser
     files: [
       'tests.webpack.js',
       '../dist/style.css'
     ],
 
-
     // list of files to exclude
     exclude: [
     ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -60,11 +67,14 @@ module.exports = function (config) {
       'tests.webpack.js': ['webpack'],
     },
 
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage'],
+    reporters: ['mocha', 'coverage', 'saucelabs'],
+
+    // saucelabs configuration (for IE testing)
+    sauceLabs: {
+      testName: 'internetips'
+    },
+    captureTimeout: 120000,
 
     coverageReporter: {
       type: 'text-summary'
@@ -73,30 +83,36 @@ module.exports = function (config) {
     // web server port
     port: 9876,
 
-
     // enable / disable colors in the output (reporters and logs)
     colors: true,
-
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
-
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
-
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    // browsers: ['Chrome', 'Firefox', 'PhantomJS', 'IE'],
-    // browsers: ['Chrome', 'Firefox'],
     browsers: _browsers,
 
     customLaunchers: {
       Chrome_travis_ci: {
         base: 'Chrome',
         flags: ['--no-sandbox']
+      },
+      SL_InternetExplorer: {
+        base: 'SauceLabs',
+        browserName: 'internet explorer',
+        version: '11.0',
+        platform: 'Windows 7'
+      },
+      SL_Edge: {
+        base: 'SauceLabs',
+        browserName: 'MicrosoftEdge',
+        version: '14.14393',
+        platform: 'Windows 10'
       }
     },
 
@@ -135,14 +151,15 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    plugins: [
-      require('karma-webpack'),
-      require('istanbul-instrumenter-loader'),
-      require('karma-mocha'),
-      require('karma-mocha-reporter'),
-      require('karma-coverage'),
-      require('karma-chrome-launcher'),
-      require('karma-firefox-launcher')
-    ]
+    // plugins: [
+    //   require('karma-webpack'),
+    //   require('istanbul-instrumenter-loader'),
+    //   require('karma-mocha'),
+    //   require('karma-mocha-reporter'),
+    //   require('karma-coverage'),
+    //   require('karma-chrome-launcher'),
+    //   require('karma-firefox-launcher'),
+    //   require('karma-sauce-launcher')
+    // ]
   });
 };
