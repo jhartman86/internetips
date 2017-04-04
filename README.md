@@ -12,10 +12,19 @@ A not-everything-under-the-sun tooltip library: lightweight, minimal style defau
 
     $ npm install internetips
 
+Alternatively you can include the distribution versions (minified or unminified) into whatever build tool you like, or directly into your pages: `dist/bundled.js` or `dist/bundled.min.js`, respectively.
 
 ## Usage
 
     const internetips = require("internetips");
+    ...
+    const node = document.querySelector('...');
+    node.addEventListener('mouseenter', function (ev) {
+        internetips.show({
+            content: 'Yolo'
+        });
+    });
+    node.addEventListener('mouseleave', internetips.hide);
 
 
 ## Running tests

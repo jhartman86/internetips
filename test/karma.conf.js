@@ -11,9 +11,7 @@ module.exports = function (config) {
 
   var _browsers = [
     'Chrome',
-    'Firefox',
-    'SL_InternetExplorer',
-    'SL_Edge'
+    'Firefox'
   ];
 
   if (process.env.TRAVIS) {
