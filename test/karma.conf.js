@@ -71,10 +71,14 @@ module.exports = function (config) {
     // saucelabs configuration (for IE testing)
     sauceLabs: {
       testName: 'internetips',
-      startConnect: false
-      // tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
+      startConnect: false,
+      tunnelIdentifier: process.env.TRAVIS_BUILD_ID,
+      connectOptions: {
+        port: 5757,
+        logfile: 'sauce_connect.log'
+      }
     },
-    captureTimeout: 120000,
+    captureTimeout: 20000,
 
     coverageReporter: {
       type: 'text-summary'
@@ -88,7 +92,7 @@ module.exports = function (config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: process.env.TRAVIS ? config.LOG_DEBUG : config.LOG_INFO,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
