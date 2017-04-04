@@ -5,7 +5,16 @@ language: node_js
 
 node_js:
   - "6"
-  - "7"
+
+addons:
+  browserstack:
+    username: "jonhartman2"
+    access_key:
+      secure: "Y25gF1mxxXleGQIahHBj23D+Su9a5rxuBwpg9cCfnka2WmQ1kI6klTao795cxYh/LJYtHXSDlRjbQfHj6UHwX07vfBBqsUQyRNq/ck1dt53LeEd22iJIVIFu9FKNJTjIgFrw07t6DySdX2
+OM0bi8y4dGVsUlPmaD9pSYXY9PSlC1qdbJacKPe9zc0YH826VMZ3dtV+G7KLrLs620QC/Qqz7DmjN2X1LX4EhLPMV3ITd8sUWKVNqYizZ8yr/hqsreclqJafbP9QdXAAc3adLVW/cpi0UUqWPmPGb5ERh
+w+1njmhN6Ymu6GeKJmi+WGeWQTSI7sAyDA9DpJWqcOCIBTuI0JPFeAqCZyw/3tnmEwoOCNbOxlfPCoc/TuVFY/iMBzQnJDpWOZ+rWluq3IiiQ2dagK0T75u8LSX6C/xg7tFffCGSCy/eRxT7S7UgIP+Fo
+am+FQhl6BVSU2SixpiMK3XLACy6Ac1EkVrFFrn84Yp7YBjrHzTQ7XYMWn8qnNWwjiu3HTKYin1/V5R1vlinI0fAW6bKvQoqeTxdQinkEMa3ge9GCmWTBlV/Yx96NSZrjVPg3Af6aj+0IsY8QxnTKFChvB
+9Aon4ktJj47YOS+gfuMAcm5xJW/UpNijnU8Ij85HUgEWczVM2/kqIO7IdzazESXRShVHYaDYOZ20ioS4Fc="
 
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
