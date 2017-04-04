@@ -94,6 +94,8 @@ context('create, hide, destroy', function () {
 
   context('monitor style mutations by mouse movement triggers', () => {
 
+    after(tooltips.destroy);
+
     /**
      * This test has a lot going on, but here's why: In short, we setup a
      * mutation observer on the tooltip node so we can watch for any changes
@@ -116,6 +118,13 @@ context('create, hide, destroy', function () {
      * updates if the position has not changed.
      */
     it('should only trigger DOM mutations as necessary', (done) => {
+      // microsoft still kinda sucks and Edge doesn't trigger mutation
+      // observer handlers when style.cssText is mutated, so we're skipping
+      // it for now :(
+      if (_.get(navigator, 'userAgent', '').indexOf('Edge')) {
+        return done();
+      }
+
       tooltips.show({content:'<p>test</p>'});
       var styleLeftMutations = [];
       var observer = new MutationObserver(function (mutations) {
@@ -131,10 +140,11 @@ context('create, hide, destroy', function () {
         if (x >= startFrom + 30) {
           observer.disconnect();
           expect(styleLeftMutations.length).to.equal(3);
-          tooltips.destroy();
-          done();
-          return;
+          return done();
         }
+        // The point of calling mouseMove 3x consecutively is to see if the mutation 
+        // observer handler gets invoked consecutively, in which case we're issuing
+        // changes to the DOM too frequently
         mouseMove(x, viewport.height / 2);
         mouseMove(x, viewport.height / 2);
         mouseMove(x, viewport.height / 2);

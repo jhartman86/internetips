@@ -64,7 +64,7 @@ window["internetips"] =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,9 +74,50 @@ window["internetips"] =
 "use strict";
 
 
+if (typeof Object.assign != 'function') {
+  /*eslint-disable no-unused-vars */
+  Object.assign = function (target, varArgs) {
+    // .length of function is 2
+    'use strict';
+
+    if (target == null) {
+      // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) {
+        // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
+        }
+      }
+    }
+    return to;
+  };
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports._defineTestHooks = exports._inspectConfig = exports._restoreConfigDefaults = exports.destroy = exports.setConfig = exports.hide = exports.show = undefined;
+
+__webpack_require__(0);
+
 exports.show = show;
 exports.hide = hide;
 exports.setConfig = setConfig;

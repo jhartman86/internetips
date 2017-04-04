@@ -3,6 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports._defineTestHooks = exports._inspectConfig = exports._restoreConfigDefaults = exports.destroy = exports.setConfig = exports.hide = exports.show = undefined;
+
+require('./object-assign.polyfill');
+
 exports.show = show;
 exports.hide = hide;
 exports.setConfig = setConfig;
