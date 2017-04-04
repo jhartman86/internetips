@@ -72,7 +72,7 @@ module.exports = function (config) {
     sauceLabs: {
       testName: 'internetips',
       startConnect: false,
-      tunnelIdentifier: process.env.TRAVIS_BUILD_ID,
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
       connectOptions: {
         port: 5757,
         logfile: 'sauce_connect.log'
