@@ -70,7 +70,9 @@ module.exports = function (config) {
 
     // saucelabs configuration (for IE testing)
     sauceLabs: {
-      testName: 'internetips'
+      testName: 'internetips',
+      startConnect: false,
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
     },
     captureTimeout: 120000,
 
