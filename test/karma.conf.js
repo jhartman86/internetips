@@ -34,6 +34,10 @@ module.exports = function (config) {
     ];
   }
 
+  if (process.env.NODE_ENV === 'test_watch') {
+    _browsers = ['Chrome'];
+  }
+
   config.set({
 
     browserNoActivityTimeout: 10000,

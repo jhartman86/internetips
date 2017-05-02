@@ -346,7 +346,7 @@ function reset() {
     while (tipNode.firstChild) {
       tipNode.removeChild(tipNode.firstChild);
     }
-    tipNode.innerHTML = null;
+    tipNode.innerHTML = '';
   }
 }
 

@@ -222,6 +222,22 @@ context('create, hide, destroy', function () {
       expect(document.querySelector('.charlie')).to.be.ok;
     });
 
+    it('should allow passing a DOM node as content parameter', function () {
+      var dv = document.createElement('div');
+      dv.className = 'tester';
+      var sp = document.createElement('span');
+      sp.innerHTML = '<i>this is some content</i>';
+      dv.appendChild(sp);
+
+      tooltips.show({content: dv});
+
+      var rendered = document.querySelector('.internetips');
+      console.log(rendered.innerHTML);
+      expect(rendered.innerHTML).to.equal(
+        '<div class="tester"><span><i>this is some content</i></span></div>'
+      );
+    });
+
     // These are unit-ish type tests, as we're just validating that
     // the options get set, NOT that the tooltip logic is using
     // them correctly. Chicken and egg type problem, so just being thorough.

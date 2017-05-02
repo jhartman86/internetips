@@ -21,21 +21,13 @@ const defaults = {
   },
   output: {
     path: path.resolve(__dirname, 'dist')
+  },
+  devServer: {
+    host: '0.0.0.0'
   }
 };
 
 module.exports = [
-  // node require-able
-  // _.merge({}, defaults, {
-  //   target: 'node',
-  //   output: {
-  //     library: 'internetips',
-  //     libraryTarget: 'commonjs2',
-  //     path: path.resolve(__dirname, 'dist/node'),
-  //     filename: 'index.js'
-  //   }
-  // }),
-
   // web (attached to window as 'internetips')
   _.merge({
     target: 'web',
