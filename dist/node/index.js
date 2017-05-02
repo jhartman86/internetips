@@ -1,20 +1,16 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports._defineTestHooks = exports._inspectConfig = exports._restoreConfigDefaults = exports.destroy = exports.setConfig = exports.hide = exports.show = undefined;
-
 require('./object-assign.polyfill');
 
-exports.show = show;
-exports.hide = hide;
-exports.setConfig = setConfig;
-exports.destroy = destroy;
-exports._restoreConfigDefaults = _restoreConfigDefaults;
-exports._inspectConfig = _inspectConfig;
-exports._defineTestHooks = _defineTestHooks;
-
+module.exports = {
+  show: show,
+  hide: hide,
+  setConfig: setConfig,
+  destroy: destroy,
+  _restoreConfigDefaults: _restoreConfigDefaults,
+  _inspectConfig: _inspectConfig,
+  _defineTestHooks: _defineTestHooks
+};
 
 var containerNode, tipNode, isOpen, isFloating, pointX, pointY, frameNeedsUpdate, lastPlacementDirection, animationFrame, windowWidth, windowHeight,
 /**
