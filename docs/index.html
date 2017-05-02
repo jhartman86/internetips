@@ -507,7 +507,9 @@
   onEditorChange();
 
   function onEditorChange() {
-    document.querySelector('#btn-trigger').remove();
+    var removable = document.querySelector('#btn-trigger');
+    removable.parentNode.removeChild(removable);
+    //document.querySelector('#btn-trigger').remove();
     var newBtn = document.createElement('button');
     newBtn.id = 'btn-trigger';
     newBtn.setAttribute('type', 'button');
