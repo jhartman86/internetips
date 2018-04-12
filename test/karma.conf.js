@@ -19,18 +19,18 @@ module.exports = function (config) {
   var _browsers = [
     'Chrome',
     'Firefox',
-    'BS_IE_10',
-    'BS_IE_11',
-    'BS_Edge'
+    // 'BS_IE_10',
+    // 'BS_IE_11',
+    // 'BS_Edge'
   ];
 
   if (process.env.TRAVIS) {
     _browsers = [
       'Chrome_travis_ci',
       'Firefox',
-      'BS_IE_10',
-      'BS_IE_11',
-      'BS_Edge'
+      // 'BS_IE_10',
+      // 'BS_IE_11',
+      // 'BS_Edge'
     ];
   }
 
@@ -81,14 +81,14 @@ module.exports = function (config) {
     },
 
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage', 'BrowserStack'],
+    reporters: ['mocha', 'coverage'/*, 'BrowserStack'*/],
 
     // BrowserStack configuration (for IE testing)
-    browserStack: {
-      name: 'internetips',
-      username: process.env.BS_USERNAME,
-      accessKey: process.env.BS_ACCESS_KEY
-    },
+    // browserStack: {
+    //   name: 'internetips',
+    //   username: process.env.BS_USERNAME,
+    //   accessKey: process.env.BS_ACCESS_KEY
+    // },
     captureTimeout: 20000,
 
     coverageReporter: {
@@ -117,27 +117,27 @@ module.exports = function (config) {
         base: 'Chrome',
         flags: ['--no-sandbox']
       },
-      BS_IE_10: {
-        base: 'BrowserStack',
-        browser: 'ie',
-        browser_version: '10',
-        os: 'Windows',
-        os_version: '7'
-      },
-      BS_IE_11: {
-        base: 'BrowserStack',
-        browser: 'ie',
-        browser_version: '11',
-        os: 'Windows',
-        os_version: '7'
-      },
-      BS_Edge: {
-        base: 'BrowserStack',
-        browser: 'edge',
-        browser_version: '14',
-        os: 'Windows',
-        os_version: '10'
-      }
+      // BS_IE_10: {
+      //   base: 'BrowserStack',
+      //   browser: 'ie',
+      //   browser_version: '10',
+      //   os: 'Windows',
+      //   os_version: '7'
+      // },
+      // BS_IE_11: {
+      //   base: 'BrowserStack',
+      //   browser: 'ie',
+      //   browser_version: '11',
+      //   os: 'Windows',
+      //   os_version: '7'
+      // },
+      // BS_Edge: {
+      //   base: 'BrowserStack',
+      //   browser: 'edge',
+      //   browser_version: '14',
+      //   os: 'Windows',
+      //   os_version: '10'
+      // }
     },
 
     // Continuous Integration mode

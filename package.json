@@ -22,7 +22,9 @@
     "test-watch": "NODE_ENV=test_watch karma start ./test/karma.conf.js --log-level debug",
     "preversion": "npm run test && npm run build",
     "postversion": "git push && git push --tags",
-    "release-patch": "npm version patch && npm publish"
+    "release-patch": "npm version patch && npm publish",
+    "release-minor": "npm version minor && npm publish",
+    "release-major": "npm version major && npm publish"
   },
   "author": "Jon Hartman",
   "license": "MIT",
