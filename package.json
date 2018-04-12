@@ -20,7 +20,7 @@
     "pretest": "npm run lint",
     "test": "karma start ./test/karma.conf.js --single-run",
     "test-watch": "NODE_ENV=test_watch karma start ./test/karma.conf.js --log-level debug",
-    "preversion": "npm run test && npm run build",
+    "preversion": "npm run test && npm run build && git add .",
     "postversion": "git push && git push --tags",
     "release-patch": "npm version patch && npm publish",
     "release-minor": "npm version minor && npm publish",

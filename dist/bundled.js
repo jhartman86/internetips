@@ -272,7 +272,7 @@ var _cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelRe
 // Null by default, these hooks can be set via injected callables that will
 // be invoked during relevant API calls. These should be used explicity for
 // testing purposes.
-var onShowHook, onHideHook, onDestroyHook;
+var onShowHook, onHideHook, onDestroyHook, onResetHook;
 
 /**
  * Set configuration defaults. If the tooltip node already exists (eg. has been
@@ -348,6 +348,10 @@ function reset() {
     }
     tipNode.innerHTML = '';
   }
+  // Test hook integration
+  if (typeof onResetHook === 'function') {
+    onResetHook();
+  }
 }
 
 /**
@@ -378,6 +382,8 @@ function destroy() {
   if (typeof onDestroyHook === 'function') {
     onDestroyHook();
   }
+  // After destroying, reset all hooks!
+  _defineTestHooks();
 }
 
 /**
@@ -604,6 +610,7 @@ function ensureInitializedAndReady() {
 function bindWindowEvents() {
   unbindWindowEvents();
   window.addEventListener('scroll', trackWindowScroll);
+  document.body.addEventListener('scroll', trackWindowScroll);
   window.addEventListener('resize', trackWindowResize);
 }
 
@@ -612,6 +619,7 @@ function bindWindowEvents() {
  */
 function unbindWindowEvents() {
   window.removeEventListener('scroll', trackWindowScroll);
+  document.body.removeEventListener('scroll', trackWindowScroll);
   window.removeEventListener('resize', trackWindowResize);
 }
 
@@ -651,20 +659,34 @@ function trackMousePosition(ev) {
  */
 var stashedConfigs = JSON.parse(JSON.stringify(configs));
 
+/**
+ * Restore config defaults resets the configs.
+ */
 function _restoreConfigDefaults() {
   Object.assign(configs, stashedConfigs);
 }
 
+/**
+ * Inspect config dumps the configuration object.
+ */
 function _inspectConfig() {
   return configs;
 }
 
+/**
+ * Used to define hooks that will be invoked at certain times;
+ * intended for test use only. Note that invoking this fn without
+ * any arguments will nullify any previously bound hooks (eg. reset
+ * all of them).
+ * @param {Object} definitions Hook definitions
+ */
 function _defineTestHooks() {
   var definitions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   onShowHook = definitions.onShow || null;
   onHideHook = definitions.onHide || null;
   onDestroyHook = definitions.onDestroy || null;
+  onResetHook = definitions.onReset || null;
 }
 
 /***/ })
