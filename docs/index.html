@@ -427,7 +427,16 @@
                 </p>
                 <p>
                   Invoked with no arguments when the tooltip <code>.destroy()</code>
-                  method is called.
+                  method is called. Note: this also unbinds all currently configured
+                  hooks; logic being you should destroy() tooltips after a test run
+                  and you'll want to unbind all existing hooks anyways.
+                </p>
+
+                <p>
+                  <kbd>onReset | function</kbd> optional
+                </p>
+                <p>
+                  Invoked with no arguments when the tooltip is reset.
                 </p>
               </div>
             </div>
